@@ -35,7 +35,6 @@ router.post("/image", imageBodyValidator, (req, res, next) => {
     if (!errors.isEmpty()) {
         /**
          #swagger.responses[400] = {
-            description: 'IllegalArguments',
             schema: {
                 errors: [
                     {
