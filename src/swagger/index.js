@@ -16,12 +16,6 @@ const doc = {
     schemes: ["http", "https"],
     consumes: ["application/json"],
     produces: ["application/json"],
-    tags: [
-        {
-            name: '', // Tag name
-            description: '', // Tag description
-        },
-    ],
     securityDefinitions: {}, // by default: empty object
     definitions: {}, // by default: empty object (Swagger 2.0)
     components: {} // by default: empty object (OpenAPI 3.x)

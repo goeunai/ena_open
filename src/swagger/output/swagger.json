@@ -7,12 +7,6 @@
   },
   "host": "localhost:7000",
   "basePath": "/",
-  "tags": [
-    {
-      "name": "",
-      "description": ""
-    }
-  ],
   "schemes": [
     "http",
     "https"
@@ -27,6 +21,9 @@
   "paths": {
     "/": {
       "get": {
+        "tags": [
+          "Home"
+        ],
         "description": "",
         "parameters": [],
         "responses": {
@@ -38,11 +35,104 @@
     },
     "/api/data/image": {
       "post": {
+        "tags": [
+          "Data"
+        ],
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "라온 서버에서 전송할 데이터 양식입니다.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "farmId": {
+                  "type": "string",
+                  "example": "goeun_farm"
+                },
+                "houseId": {
+                  "type": "string",
+                  "example": "goeun_1"
+                },
+                "sequence": {
+                  "type": "number",
+                  "example": 1
+                },
+                "sequenceDate": {
+                  "type": "string",
+                  "example": "20230101"
+                },
+                "totalRounds": {
+                  "type": "number",
+                  "example": 3
+                },
+                "images": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "round": {
+                        "type": "number",
+                        "example": 3
+                      },
+                      "category": {
+                        "type": "string",
+                        "example": "sideFruit"
+                      },
+                      "image": {
+                        "type": "string",
+                        "example": "...byte stream... 9"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "farmId",
+                "houseId",
+                "sequence",
+                "sequenceDate",
+                "totalRounds",
+                "images"
+              ]
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "IllegalArguments",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "msg": {
+                        "type": "string",
+                        "example": "farmId는 필수값입니다."
+                      },
+                      "param": {
+                        "type": "string",
+                        "example": "farmId"
+                      },
+                      "location": {
+                        "type": "string",
+                        "example": "body"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }

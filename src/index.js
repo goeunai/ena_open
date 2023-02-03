@@ -4,20 +4,22 @@ dotenv.config();
 import {PORT} from './common/constants.js';
 import express from 'express';
 import helmet from 'helmet';
-import DataRouter from './router/data.js';
+import DataRouter from './routes/data.js';
 import swaggerFile from './swagger/output/swagger.json' assert { type: "json" };
 import swaggerUi from 'swagger-ui-express';
+import bodyParser from "body-parser";
+
 
 /**
  * App
  */
 const app = express();
 
-
 /**
  * Configuration
  */
 app.use(helmet());
+app.use(bodyParser.json())
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, { explorer: true }));
 
 
@@ -25,7 +27,8 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, { explorer: true 
  * API
  */
 app.get("/", (req, res) => {
-    res.send(":)");
+    // #swagger.tags = ['Home']
+    res.send("Ok");
 });
 app.use("/api/data", DataRouter);
 
