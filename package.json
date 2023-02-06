@@ -8,9 +8,10 @@
     "autogen": "node src/swagger/index.js",
     "server": "nodemon --watch src/ src/index.js",
     "dev": "npm run autogen && npm run server",
-    "start": "cross-env NODE_ENV=production npm run autogen && pm2 start src/index.js --name ena-open"
+    "start": "cross-env NODE_ENV=production npm run autogen && pm2 start src/index.js --name ena-open",
+    "reload": "npx pm2 reload all"
   },
-  "author": "",
+  "author": "juhyeon1114@gmail.com",
   "license": "ISC",
   "dependencies": {
     "@sentry/node": "^7.36.0",

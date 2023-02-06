@@ -37,7 +37,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, { explorer: true 
  */
 app.get("/", (req, res) => {
     // #swagger.tags = ['Home']
-    res.send("Ok");
+    res.send("Ok" + process.env.NODE_ENV);
 });
 app.use("/api/data", DataRouter);
 
