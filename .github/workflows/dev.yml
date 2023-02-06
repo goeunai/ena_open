@@ -14,7 +14,7 @@ env:
   ZIP_FILE: ena-open/dev/$GITHUB_SHA.zip
 
 jobs:
-  deploy-app:
+  DeployingApp:
     runs-on: ubuntu-20.04
     steps:
     - name: 브랜치로 이동
