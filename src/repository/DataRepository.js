@@ -65,7 +65,7 @@ export default class DataRepository {
             filename: this.getFilename(image),
             path: basePath,
         }));
-        const apiList = results.map(result => awsService.uploadAction(result.image, this.getFilePath(result)));
+        const apiList = results.map(result => awsService.upload(result.image, this.getFilePath(result)));
         const etagList = await Promise.all(apiList);
 
         return results.map((result, idx) => {
