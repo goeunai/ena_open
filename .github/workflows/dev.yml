@@ -3,7 +3,7 @@ run-name: Deploying ena-open-dev
 on:
   push:
     branches:
-      - 'dev/**'
+      - dev
 
 env:
   APP_ENV: dev
