@@ -51,5 +51,10 @@ export const RawImageSchema = (rawSequenceId, image) => {
         raw_sequence_id: rawSequenceId,
         round: Number(image.round),
         category: image.category,
+        file_stream: image.image,
+        filename: image.filename,
+        path: image.path,
+        try: 0,
+        etag: image.etag
     }
 }

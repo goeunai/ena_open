@@ -21,16 +21,14 @@ export default class AWSService {
         }
     }
 
-    uploadAction(binary, file) {
+    uploadAction(binary, filePath) {
         return new Promise((resolve, reject) => {
-            let reformed = file[0] === "/" ? file.substring(1, file.length) : file
-
             const params = {
                 Bucket: process.env.BUCKET_NAME,
-                Key: reformed,
+                Key: filePath,
                 Body: binary,
-                ContentType: "image/jpeg",
-            }
+                ContentType: `image/png`,
+            };
 
             this.s3
                 .putObject(params)
@@ -39,7 +37,8 @@ export default class AWSService {
                     resolve(res)
                 })
                 .catch((error) => {
-                    reject(error)
+                    // ToDo: Sentry
+                    resolve({ETag: null})
                 })
         })
     }

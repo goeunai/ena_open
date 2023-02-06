@@ -101,7 +101,27 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number",
+                  "example": 10
+                },
+                "success": {
+                  "type": "number",
+                  "example": 9
+                },
+                "fail": {
+                  "type": "number",
+                  "example": 1
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "Bad Request",
@@ -136,7 +156,18 @@
           },
           "500": {
             "description": "Internal Server Error",
-            "error": "메세지 || 서버 에러"
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "메세지 || 서버 에러"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }

@@ -5,18 +5,23 @@ export const handleImage = async (req, res) => {
 
     try {
         await repository.createConnection();
-        await repository.createRawData(req.body);
+        const results = await repository.createRawData(req.body);
         repository.destroyConnection();
 
+        const total = results.length;
+        const success = results.filter(v => v.etag).length;
+
         /**
-         #swagger.responses[200] = "Ok"
+         #swagger.responses[200] = {
+            schema: {total: 10, success: 9, fail: 1}
+         }
          */
-        res.send("Ok");
+        res.status(200).json({total, success, fail: total - success});
     } catch (e) {
         console.error(e);
         /**
          #swagger.responses[500] = {
-            error: "메세지 || 서버 에러"
+            schema: { error: "메세지 || 서버 에러" }
          }
          */
         return res.status(500).json({error: e?.message || "서버 에러"});
