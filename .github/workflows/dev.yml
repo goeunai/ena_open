@@ -11,7 +11,6 @@ env:
   AWS_S3_BUCKET: app-release-files
   AWS_CODE_DEPLOY_APPLICATION: ena-open-dev-CD
   AWS_CODE_DEPLOY_GROUP: ena-open-dev-CD-group
-  ZIP_FILE: ena-open/dev/$GITHUB_SHA.zip
 
 jobs:
   DeployingApp:
@@ -30,6 +29,6 @@ jobs:
     - name: S3에서 설정파일 가져오기
       run: aws s3 cp s3://goeun-config/ena-open/$APP_ENV.env .env
     - name: S3에 업로드
-      run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/$ZIP_FILE --source .
+      run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/ena-open/dev/$GITHUB_SHA.zip --source .
     - name: EC2에 배포
-      run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=$ZIP_FILE,bundleType=zip
+      run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=ena-open/dev/$GITHUB_SHA.zip,bundleType=zip
