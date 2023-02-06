@@ -8,7 +8,8 @@ import DataRouter from './routes/data.js';
 import swaggerFile from './swagger/output/swagger.json' assert { type: "json" };
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from "body-parser";
-
+import * as Sentry from "@sentry/node";
+import * as Tracing from "@sentry/tracing";
 
 /**
  * App
@@ -18,10 +19,18 @@ const app = express();
 /**
  * Configuration
  */
+Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    integrations: [
+        new Sentry.Integrations.Http({ tracing: true }),
+        new Tracing.Integrations.Express({ app }),
+    ],
+    tracesSampleRate: 1.0,
+});
+
 app.use(helmet());
 app.use(bodyParser.json())
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, { explorer: true }));
-
 
 /**
  * API

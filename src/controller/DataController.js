@@ -1,4 +1,5 @@
 import DataRepository from "../repository/DataRepository.js";
+import LogService from "../serivice/log.service.js";
 
 export const handleImage = async (req, res) => {
     const repository = new DataRepository();
@@ -18,6 +19,7 @@ export const handleImage = async (req, res) => {
          */
         res.status(200).json({total, success, fail: total - success});
     } catch (e) {
+        new LogService().logError(e);
         console.error(e);
         /**
          #swagger.responses[500] = {

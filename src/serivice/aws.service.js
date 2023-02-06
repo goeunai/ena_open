@@ -1,4 +1,5 @@
 import AWS from "aws-sdk"
+import LogService from "./log.service.js";
 
 export default class AWSService {
     s3
@@ -37,7 +38,7 @@ export default class AWSService {
                     resolve(res)
                 })
                 .catch((error) => {
-                    // ToDo: Sentry
+                    new LogService().logError(error);
                     resolve({ETag: null})
                 })
         })
