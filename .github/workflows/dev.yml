@@ -15,7 +15,7 @@ env:
   AWS_S3_ARN: s3://$AWS_S3_BUCKET/$ZIP_FILE
 
 jobs:
-  build-with-gradle:
+  running:
     runs-on: ubuntu-20.04
     steps:
     - name: 브랜치로 이동
