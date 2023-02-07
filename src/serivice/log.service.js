@@ -2,7 +2,8 @@ import * as Sentry from '@sentry/node';
 
 export default class LogService {
 
-    logError(e) {
+    static logError(e) {
+        console.error(e);
         Sentry.captureException(e);
     }
 

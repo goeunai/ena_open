@@ -19,7 +19,7 @@ export default class DataRepository {
                 password: process.env.DB_PW,
                 database: process.env.DB_NAME,
             },
-        })
+        });
     }
 
     async createConnection() {
@@ -92,13 +92,9 @@ export default class DataRepository {
     }
 
     async createRawImages(rawSequenceId, images = []) {
-        try {
-            for (let i = 0; i < images.length; i++) {
-                const image = images[i];
-                await this.createRawImage(rawSequenceId, image);
-            }
-        } catch (e) {
-            throw Error(`이미지 저장 실패: ${e.message}`)
+        for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            await this.createRawImage(rawSequenceId, image);
         }
     }
 

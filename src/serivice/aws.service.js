@@ -5,13 +5,15 @@ export default class AWSService {
     s3
 
     constructor() {
+        if (this.s3) return;
+
         AWS.config.update({
             region: "ap-northeast-2",
             accessKeyId: process.env.ACCESS_KEY,
             secretAccessKey: process.env.SECRET_KEY,
-        })
+        });
 
-        this.s3 = new AWS.S3()
+        this.s3 = new AWS.S3();
     }
 
     upload(binary, filePath) {
@@ -29,10 +31,10 @@ export default class AWSService {
                 .then((res) => {
                     resolve(res)
                 })
-                .catch((error) => {
-                    new LogService().logError(error);
+                .catch(e => {
+                    LogService.logError(e);
                     resolve({ETag: null})
-                })
+                });
         })
     }
 }

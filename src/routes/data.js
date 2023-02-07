@@ -37,17 +37,21 @@ router.post("/image", imageBodyValidator, (req, res, next) => {
          #swagger.responses[400] = {
             schema: {
                 errors: [
-                    {
-                        msg: "farmId는 필수값입니다.",
-                        param: "farmId",
-                        location: "body"
-                    }
+                    { msg: "farmId는 필수값입니다.", param: "farmId", location: "body" }
                 ]
             }
          }
          */
         return res.status(400).json({ errors: errors.array() });
     }
+    /**
+     * #swagger.responses[200] = {
+            schema: {total: 10, success: 9, fail: 1}
+        }
+     * #swagger.responses[500] = {
+            schema: { error: "메세지 || 서버 에러" }
+        }
+     */
     return handleImage(req, res, next);
 });
 
