@@ -5,13 +5,26 @@ import SwaggerAutogen from 'swagger-autogen';
 
 console.log("=== Swagger Autogen ===")
 
+const getHost = (env) => {
+    switch (env) {
+        case undefined:
+            return `localhost:7000`;
+        case "dev":
+            return "open-dev.goeunai.com";
+        case "production":
+            return "open.goeunai.com";
+        default:
+            return "";
+    }
+}
+
 const doc = {
     info: {
         version: '1.0.0',
         title: 'Ena open API',
         description: '외부 데이터를 수신하는 API들입니다.',
     },
-    host: process.env.HOST,
+    host: getHost(process.env.NODE_ENV),
     basePath: '/',
     schemes: ["http", "https"],
     consumes: ["application/json"],
