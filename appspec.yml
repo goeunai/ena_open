@@ -5,6 +5,7 @@ files:
   - source:  /
     destination: /home/ubuntu/ena_open
     overwrite: yes
+file_exists_behavior: OVERWRITE
 
 permissions:
   - object: /
