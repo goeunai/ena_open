@@ -7,7 +7,6 @@ console.log("=== Swagger Autogen ===")
 
 const getHost = () => {
     const env = process.env.NODE_ENV;
-    console.log('env', env);
     switch (env) {
         case undefined:
             return `localhost:7000`;
@@ -20,13 +19,16 @@ const getHost = () => {
     }
 }
 
+const host = getHost();
+console.log('host', host);
+
 const doc = {
     info: {
         version: '1.0.0',
         title: 'Ena open API',
         description: '외부 데이터를 수신하는 API들입니다.',
     },
-    host: getHost(),
+    host,
     basePath: '/',
     schemes: ["http", "https"],
     consumes: ["application/json"],
