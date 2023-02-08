@@ -10,7 +10,6 @@ import swaggerUi from 'swagger-ui-express';
 import bodyParser from "body-parser";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
-import {httpsOnly} from "./middleware/httpsOnly.js";
 import compression from 'compression';
 
 /**
