@@ -4,9 +4,10 @@ dotenv.config();
 import SwaggerAutogen from 'swagger-autogen';
 
 console.log("=== Swagger Autogen ===")
-console.log(process.env.NODE_ENV);
 
-const getHost = (env) => {
+const getHost = () => {
+    const env = process.env.NODE_ENV;
+    console.log('env', env);
     switch (env) {
         case undefined:
             return `localhost:7000`;
@@ -25,7 +26,7 @@ const doc = {
         title: 'Ena open API',
         description: '외부 데이터를 수신하는 API들입니다.',
     },
-    host: getHost(process.env.NODE_ENV),
+    host: getHost(),
     basePath: '/',
     schemes: ["http", "https"],
     consumes: ["application/json"],
