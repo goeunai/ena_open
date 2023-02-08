@@ -45,12 +45,15 @@ router.post("/image", imageBodyValidator, (req, res, next) => {
         return res.status(400).json({ errors: errors.array() });
     }
     /**
-     * #swagger.responses[200] = {
-            schema: {total: 10, success: 9, fail: 1}
-        }
-     * #swagger.responses[500] = {
-            schema: { error: "메세지 || 서버 에러" }
-        }
+     #swagger.responses[200] = {
+        schema: {total: 10, success: 9, fail: 1}
+     }
+     #swagger.responses[403] = {
+        schema: { error: 'Https Only' }
+     }
+     #swagger.responses[500] = {
+        schema: { error: "메세지 || 서버 에러" }
+     }
      */
     return handleImage(req, res, next);
 });
