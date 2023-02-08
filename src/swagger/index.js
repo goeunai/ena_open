@@ -4,6 +4,7 @@ dotenv.config();
 import SwaggerAutogen from 'swagger-autogen';
 
 console.log("=== Swagger Autogen ===")
+console.log(process.env.NODE_ENV);
 
 const getHost = (env) => {
     switch (env) {
