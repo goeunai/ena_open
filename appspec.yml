@@ -12,9 +12,9 @@ permissions:
     group: ubuntu
 
 hooks:
-  AfterInstall:
-    - location: scripts/install.sh
-      timeout: 120
+#  AfterInstall:
+#    - location: scripts/install.sh
+#      timeout: 120
   ApplicationStart:
     - location: scripts/reload.sh
       timeout: 60
