@@ -28,6 +28,14 @@ jobs:
         aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
     - name: S3에서 설정파일 가져오기
       run: aws s3 cp s3://goeun-config/ena-open/$APP_ENV.env $GITHUB_WORKSPACE/.env
+    - name: Node 설치
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - name: npm i
+      run: npm i
+    - name: Swagger 생성
+      run: npm run autogen
     - name: S3에 업로드
       run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --s3-location s3://$AWS_S3_BUCKET/ena-open/dev/$GITHUB_SHA.zip --source .
     - name: EC2에 배포
