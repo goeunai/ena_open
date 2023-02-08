@@ -3,7 +3,8 @@ import LogService from "../serivice/log.service.js";
 
 export const handleImage = async (req, res) => {
     try {
-        const repository = await new DataRepository().createConnection();
+        const repository = new DataRepository();
+        await repository.createConnection();
         const results = await repository.createRawData(req.body);
         repository.destroyConnection();
 
