@@ -30,8 +30,8 @@ Sentry.init({
     tracesSampleRate: 1.0,
 });
 
+// app.use(httpsOnly);
 app.use(compression());
-app.use(httpsOnly);
 app.use(helmet());
 app.use(bodyParser.json())
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, { explorer: true }));
