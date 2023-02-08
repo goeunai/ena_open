@@ -54,7 +54,6 @@ export const RawImageSchema = (rawSequenceId, image) => {
         file_stream: image.image,
         filename: image.filename,
         path: image.path,
-        try: 0,
         etag: image.etag
     }
 }
