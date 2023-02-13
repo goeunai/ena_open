@@ -1,34 +1,4 @@
-import {isNumber} from "../common/utils.js";
-
-export const farmSchema = (farmId) => {
-    if (isNumber(farmId)) {
-        return {
-            farm_id: Number(farmId) || null,
-            farm_id_alias: null,
-        }
-    } else {
-        return {
-            farm_id: null,
-            farm_id_alias: farmId,
-        }
-    }
-}
-
-export const houseSchema = (houseId) => {
-    if (isNumber(houseId)) {
-        return {
-            house_id: Number(houseId) || null,
-            house_id_alias: null,
-        }
-    } else {
-        return {
-            house_id: null,
-            house_id_alias: houseId,
-        }
-    }
-}
-
-export const RawSequenceSchema = (
+export const SequenceSchema = (
     {
         farmId,
         houseId,
@@ -38,20 +8,20 @@ export const RawSequenceSchema = (
     }
 ) => {
     return {
-        ...farmSchema(farmId),
-        ...houseSchema(houseId),
+        raw_farm_id: farmId,
+        raw_house_id: houseId,
         sequence_date: sequenceDate,
         sequence: Number(sequence),
         total_rounds: Number(totalRounds),
     }
 }
 
-export const RawImageSchema = (rawSequenceId, image) => {
+export const CaptureImageSchema = (sequenceId, image) => {
     return {
-        raw_sequence_id: rawSequenceId,
-        round: Number(image.round),
+        sequence_id: sequenceId,
+        round_number: Number(image.round),
         category: image.category,
-        file_stream: image.image,
+        binary_data: image.image,
         filename: image.filename,
         path: image.path,
         etag: image.etag

@@ -5,7 +5,7 @@ export const handleImage = async (req, res) => {
     try {
         const repository = new DataRepository();
         await repository.createConnection();
-        const results = await repository.createRawData(req.body);
+        const results = await repository.createDataSet(req.body);
         repository.destroyConnection();
 
         const total = results.length;

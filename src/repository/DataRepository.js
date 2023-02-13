@@ -1,10 +1,10 @@
 import knex from "knex"
-import {RawImageSchema, RawSequenceSchema} from "../schema/index.js";
+import {CaptureImageSchema, SequenceSchema} from "../schema/index.js";
 import AWSService from "../serivice/aws.service.js";
 import {trimmed} from "../common/utils.js";
 
-const RAW_SEQUENCE = "raw_sequence";
-const RAW_IMAGE = 'raw_image';
+const SEQUENCE = "sequence";
+const CAPTURE_IMAGE = 'capture_image';
 
 export default class DataRepository {
     /** @type client {knex} */ client
@@ -24,7 +24,7 @@ export default class DataRepository {
 
     async createConnection() {
         try {
-            await this.client.raw("SELECT * FROM raw_sequence LIMIT 1;");
+            await this.client.raw("SELECT * FROM sequence LIMIT 1;");
         } catch (error) {
             throw Error(`DB 연결 실패: ${error.message}`)
         }
@@ -43,8 +43,8 @@ export default class DataRepository {
         return `${now}_${image.round}_${image.category || 'N'}.png`
     }
 
-    async createRawData({images, ...data}) {
-        const rawSequenceId = await this.createRawSequence(data);
+    async createDataSet({images, ...data}) {
+        const sequenceId = await this.createSequence(data);
         const basePath = `${data.farmId}/${data.houseId}/${data.sequenceDate}/${data.sequence}`;
 
         const results = await this.saveToS3(basePath, images);
@@ -53,7 +53,7 @@ export default class DataRepository {
             image: result.etag ? null : result.image
         }))
 
-        await this.createRawImages(rawSequenceId, reformed);
+        await this.createCaptureImages(sequenceId, reformed);
         return results;
     }
 
@@ -74,27 +74,27 @@ export default class DataRepository {
         });
     }
 
-    async createRawSequence(data) {
+    async createSequence(data) {
         try {
-            const results = await this.client(RAW_SEQUENCE).insert(RawSequenceSchema(data));
+            const results = await this.client(SEQUENCE).insert(SequenceSchema(data));
             return results[0];
         } catch (e) {
             throw Error(`시퀀스 저장 실패: ${e.message}`)
         }
     }
 
-    async createRawImage(rawSequenceId, image) {
+    async createCaptureImage(sequenceId, image) {
         try {
-            await this.client(RAW_IMAGE).insert(RawImageSchema(rawSequenceId, image));
+            await this.client(CAPTURE_IMAGE).insert(CaptureImageSchema(sequenceId, image));
         } catch (e) {
             throw Error(`이미지 저장 실패: ${e.message}`)
         }
     }
 
-    async createRawImages(rawSequenceId, images = []) {
+    async createCaptureImages(sequenceId, images = []) {
         for (let i = 0; i < images.length; i++) {
             const image = images[i];
-            await this.createRawImage(rawSequenceId, image);
+            await this.createCaptureImage(sequenceId, image);
         }
     }
 
