@@ -11,7 +11,7 @@ export const SequenceSchema = (
         raw_farm_id: farmId,
         raw_house_id: houseId,
         sequence_date: sequenceDate,
-        sequence: Number(sequence),
+        sequence_number: Number(sequence),
         total_rounds: Number(totalRounds),
     }
 }
