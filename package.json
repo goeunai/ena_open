@@ -7,7 +7,7 @@
   "scripts": {
     "server": "nodemon --watch src/ src/index.js",
     "dev": "npm run autogen && npm run server",
-    "start": "cross-env pm2 start src/index.js --name ena-open",
+    "start": "pm2 start src/index.js --name ena-open",
     "autogen": "node src/swagger/index.js"
   },
   "author": "juhyeon1114@gmail.com",
