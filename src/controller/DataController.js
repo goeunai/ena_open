@@ -1,15 +1,11 @@
-import DataRepository from "../repository/DataRepository.js";
 import LogService from "../serivice/log.service.js";
+import DataService from "../service/DataService.js";
 
 export const handleImage = async (req, res) => {
     try {
-        const repository = new DataRepository();
-        await repository.createConnection();
-        const results = await repository.createDataSet(req.body);
-        repository.destroyConnection();
-
+        const results = await new DataService().createDataSet(req.body);
         const total = results.length;
-        const success = results.filter(v => v.etag).length;
+        const success = results.filter(v => v.image).length;
 
         res.status(200).json({total, success, fail: total - success});
     } catch (e) {

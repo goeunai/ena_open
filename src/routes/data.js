@@ -18,15 +18,15 @@ router.post("/image", imageBodyValidator, (req, res, next) => {
                     $sequenceDate: "20230101",
                     $totalRounds: 3,
                     $images : [
-                        {"round": 1, "category": "top", "image": "...byte stream... 1"},
-                        {"round": 1, "category": "sideCrown", "image": "...byte stream... 2"},
-                        {"round": 1, "category": "sideFruit", "image": "...byte stream... 3"},
-                        {"round": 2, "category": "top", "image": "...byte stream... 4"},
-                        {"round": 2, "category": "sideCrown", "image": "...byte stream... 5"},
-                        {"round": 2, "category": "sideFruit", "image": "...byte stream... 6"},
-                        {"round": 3, "category": "top", "image": "...byte stream... 7"},
-                        {"round": 3, "category": "sideCrown", "image": "...byte stream... 8"},
-                        {"round": 3, "category": "sideFruit", "image": "...byte stream... 9"},
+                        {"round": 1, "category": "top", "image": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"},
+                        {"round": 1, "category": "sideCrown", "image": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"},
+                        {"round": 1, "category": "sideFruit", "image": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"},
+                        {"round": 2, "category": "top", "image": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"},
+                        {"round": 2, "category": "sideCrown", "image": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"},
+                        {"round": 2, "category": "sideFruit", "image": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"},
+                        {"round": 3, "category": "top", "image": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"},
+                        {"round": 3, "category": "sideCrown", "image": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"},
+                        {"round": 3, "category": "sideFruit", "image": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"},
                     ]
                 }
      }

@@ -21,9 +21,9 @@ export const CaptureImageSchema = (sequenceId, image) => {
         sequence_id: sequenceId,
         round_number: Number(image.round),
         category: image.category,
-        binary_data: image.image,
+        origin_path: image.image,
         filename: image.filename,
         path: image.path,
-        etag: image.etag
+        etag: null,
     }
 }

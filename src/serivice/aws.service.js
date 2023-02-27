@@ -1,5 +1,6 @@
 import AWS from "aws-sdk"
 import LogService from "./log.service.js";
+import axios from "axios";
 
 export default class AWSService {
     s3
@@ -14,6 +15,20 @@ export default class AWSService {
         });
 
         this.s3 = new AWS.S3();
+    }
+
+    async transferUrlToBinary(url) {
+        try {
+            const res = await axios({
+                method: "get",
+                url,
+                responseType: 'arraybuffer',
+            });
+            return Buffer.from(res.data, 'binary');
+        } catch (e) {
+            console.error(e);
+        }
+
     }
 
     upload(binary, filePath) {

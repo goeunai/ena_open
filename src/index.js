@@ -12,6 +12,7 @@ import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 import compression from 'compression';
 import dayjs from "dayjs";
+import * as fs from "fs";
 
 /**
  * App
@@ -31,8 +32,6 @@ Sentry.init({
     tracesSampleRate: 1.0,
 });
 
-const timeout = 10 * 60 * 1000;
-app.set('server.timeout', timeout);
 app.use(compression());
 app.use(helmet());
 app.use(bodyParser.json({limit: '10000mb'}));
@@ -52,3 +51,5 @@ app.use("/api/data", DataRouter);
 app.listen(PORT, () => {
     console.log("Running", PORT);
 });
+
+app.timeout = 300 * 1000;

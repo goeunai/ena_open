@@ -1,101 +1,80 @@
 import knex from "knex"
 import {CaptureImageSchema, SequenceSchema} from "../schema/index.js";
-import AWSService from "../serivice/aws.service.js";
-import {trimmed} from "../common/utils.js";
 
 const SEQUENCE = "sequence";
 const CAPTURE_IMAGE = 'capture_image';
 
 export default class DataRepository {
-    /** @type client {knex} */ client
+    DB_OPTION = {
+        client: "mysql2",
+        connection: {
+            port: 3306,
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PW,
+            database: process.env.DB_NAME,
+        },
+    };
 
-    constructor() {
-        this.client = knex({
-            client: "mysql2",
-            connection: {
-                port: 3306,
-                host: process.env.DB_HOST,
-                user: process.env.DB_USER,
-                password: process.env.DB_PW,
-                database: process.env.DB_NAME,
-            },
-        });
-    }
-
-    async createConnection() {
+    /**
+     * @returns {Promise<knex>}
+     */
+    async connect() {
         try {
-            await this.client.raw("SELECT * FROM sequence LIMIT 1;");
+            const client = knex(this.DB_OPTION);
+            await client.raw("SELECT * FROM sequence LIMIT 1;");
+            return client;
         } catch (error) {
             throw Error(`DB 연결 실패: ${error.message}`)
         }
     }
 
-    destroyConnection() {
-        this.client.destroy();
+    destroy(client) {
+        client.destroy();
     }
 
-    getFilePath(image) {
-        return `${image.path}/${image.filename}`;
-    }
-
-    getFilename(image) {
-        const now = new Date().valueOf();
-        return `${now}_${image.round}_${image.category || 'N'}.png`
-    }
-
-    async createDataSet({images, ...data}) {
-        const sequenceId = await this.createSequence(data);
-        const basePath = `${data.farmId}/${data.houseId}/${data.sequenceDate}/${data.sequence}`;
-
-        const results = await this.saveToS3(basePath, images);
-        const reformed = results.map(result => ({
-            ...result,
-            image: result.etag ? null : result.image
-        }))
-
-        await this.createCaptureImages(sequenceId, reformed);
-        return results;
-    }
-
-    async saveToS3(basePath, images) {
-        const awsService = new AWSService();
-        const results = images.map(image => ({
-            ...image,
-            etag: null,
-            filename: this.getFilename(image),
-            path: basePath,
-        }));
-        const apiList = results.map(result => awsService.upload(result.image, this.getFilePath(result)));
-        const etagList = await Promise.all(apiList);
-
-        return results.map((result, idx) => {
-            const etag = etagList[idx]['ETag'] ? trimmed(etagList[idx]['ETag']) : null;
-            return {...result, etag};
-        });
+    async updateEtag(rowId, etag) {
+        const client = await this.connect();
+        try {
+            await this.connect();
+            const update = await client(CAPTURE_IMAGE).update({etag}).where('id', rowId);
+        } catch (e) {
+            throw Error(`Etag 저장 실패: ${e.message}`)
+        } finally {
+            this.destroy(client);
+        }
     }
 
     async createSequence(data) {
+        const client = await this.connect();
         try {
-            const results = await this.client(SEQUENCE).insert(SequenceSchema(data));
+            const results = await client(SEQUENCE).insert(SequenceSchema(data));
             return results[0];
         } catch (e) {
-            throw Error(`시퀀스 저장 실패: ${e.message}`)
+            throw Error(`시퀀스 저장 실패: ${e.message}`);
+        } finally {
+            this.destroy(client);
         }
     }
 
     async createCaptureImage(sequenceId, image) {
+        const client = await this.connect();
         try {
-            await this.client(CAPTURE_IMAGE).insert(CaptureImageSchema(sequenceId, image));
+            const res = await client(CAPTURE_IMAGE).insert(CaptureImageSchema(sequenceId, image));
+            return res[0];
         } catch (e) {
             throw Error(`이미지 저장 실패: ${e.message}`)
+        } finally {
+            this.destroy(client);
         }
     }
 
     async createCaptureImages(sequenceId, images = []) {
-        for (let i = 0; i < images.length; i++) {
-            const image = images[i];
-            await this.createCaptureImage(sequenceId, image);
-        }
+        const apiList = images.map(async image => {
+            const rowId = await this.createCaptureImage(sequenceId, image);
+            return {...image, rowId};
+        });
+        return await Promise.all(apiList);
     }
 
 }
