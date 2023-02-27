@@ -32,8 +32,9 @@ Sentry.init({
 // app.use(httpsOnly);
 app.use(compression());
 app.use(helmet());
-app.use(bodyParser.json())
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, { explorer: true }));
+app.use(bodyParser.json({limit: '10000mb'}));
+app.use(bodyParser.urlencoded({limit: '10000mb', extended: false}));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, {explorer: true}));
 
 /**
  * API
