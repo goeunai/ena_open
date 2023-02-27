@@ -15,57 +15,66 @@ export default class DataRepository {
             database: process.env.DB_NAME,
         },
     };
+    /** @type {knex} */ client
 
     /**
      * @returns {Promise<knex>}
      */
     async connect() {
+        return knex(this.DB_OPTION);
+    }
+
+    async checkConnection(client) {
         try {
-            const client = knex(this.DB_OPTION);
             await client.raw("SELECT * FROM sequence LIMIT 1;");
-            return client;
-        } catch (error) {
+        } catch (e) {
             throw Error(`DB 연결 실패: ${error.message}`)
         }
     }
 
-    async destroy(client) {
-        await client.destroy();
+    async getConnect() {
+        if (!this.client) {
+            this.client =  await this.connect();
+        }
+        return this.client;
     }
 
+    async destroy() {
+        try {
+            await this.client.destroy();
+        } catch (e) {
+            console.log('DB 종료 실패', e);
+        }
+    }
+
+
     async updateEtag(rowId, etag) {
-        const client = await this.connect();
+        const client = await this.getConnect();
         try {
             await this.connect();
             const update = await client(CAPTURE_IMAGE).update({etag}).where('id', rowId);
         } catch (e) {
             throw Error(`Etag 저장 실패: ${e.message}`)
-        } finally {
-            await this.destroy(client);
         }
     }
 
     async createSequence(data) {
-        const client = await this.connect();
+        const client = await this.getConnect();
         try {
             const results = await client(SEQUENCE).insert(SequenceSchema(data));
             return results[0];
         } catch (e) {
             throw Error(`시퀀스 저장 실패: ${e.message}`);
-        } finally {
-            await this.destroy(client);
         }
     }
 
     async createCaptureImage(sequenceId, image) {
-        const client = await this.connect();
+        const client = await this.getConnect();
         try {
             const res = await client(CAPTURE_IMAGE).insert(CaptureImageSchema(sequenceId, image));
             return res[0];
         } catch (e) {
             throw Error(`이미지 저장 실패: ${e.message}`)
-        } finally {
-            await this.destroy(client);
         }
     }
 

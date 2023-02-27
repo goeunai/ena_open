@@ -3,11 +3,11 @@ import AWSService from "./aws.service.js";
 import DataRepository from "../repository/DataRepository.js";
 
 export default class DataService {
-    dataRepository = new DataRepository();
     awsService = new AWSService();
 
     async createDataSet({images, ...data}) {
-        const sequenceId = await this.dataRepository.createSequence(data);
+        const dataRepository = new DataRepository();
+        const sequenceId = await dataRepository.createSequence(data);
         const basePath = `${data.farmId}/${data.houseId}/${data.sequenceDate}/${data.sequence}`;
 
         const reformed = images.map(image => ({
@@ -16,7 +16,8 @@ export default class DataService {
             filename: createFilename(image),
             path: basePath,
         }));
-        const imagesWithRowId = await this.dataRepository.createCaptureImages(sequenceId, reformed);
+        const imagesWithRowId = await dataRepository.createCaptureImages(sequenceId, reformed);
+        await dataRepository.destroy();
         /**
          * 비동기적으로 S3에 저장
          */
@@ -24,16 +25,18 @@ export default class DataService {
         return reformed;
     }
 
-    async uploadImage(image) {
+    async uploadImage(image, repository) {
         const buffer = await this.awsService.transferUrlToBinary(image.image);
         const etagObj = await this.saveBinaryImageToS3(buffer, getFilePath(image));
         const etag = etagObj.ETag;
-        await this.dataRepository.updateEtag(image.rowId, etag);
+        await repository.updateEtag(image.rowId, etag);
     }
 
     async saveImagesToS3(images = []) {
-        const apiList = images.map(image => this.uploadImage(image));
+        const dataRepository = new DataRepository();
+        const apiList = images.map(image => this.uploadImage(image, dataRepository));
         await Promise.all(apiList);
+        await dataRepository.destroy();
         // for (const image of images) {
         //     await this.uploadImage(image);
         // }
