@@ -11,11 +11,14 @@ import bodyParser from "body-parser";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 import compression from 'compression';
+import timeout from 'connect-timeout';
+import dayjs from "dayjs";
 
 /**
  * App
  */
 const app = express();
+const now = dayjs().format("YYYY-MM-DD HH:mm");
 
 /**
  * Configuration
@@ -32,6 +35,7 @@ Sentry.init({
 // app.use(httpsOnly);
 app.use(compression());
 app.use(helmet());
+app.use(timeout('300s'));
 app.use(bodyParser.json({limit: '10000mb'}));
 app.use(bodyParser.urlencoded({limit: '10000mb', extended: false}));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, {explorer: true}));
@@ -42,7 +46,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, {explorer: true})
 app.get("/", (req, res) => {
     // #swagger.tags = ['Home']
     console.log(process.env.NODE_ENV);
-    res.send("Ok");
+    res.send(`Ok : ${now}`);
 });
 app.use("/api/data", DataRouter);
 
