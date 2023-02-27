@@ -11,7 +11,6 @@ import bodyParser from "body-parser";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 import compression from 'compression';
-import timeout from 'connect-timeout';
 import dayjs from "dayjs";
 
 /**
@@ -32,10 +31,10 @@ Sentry.init({
     tracesSampleRate: 1.0,
 });
 
-// app.use(httpsOnly);
+const timeout = 10 * 60 * 1000;
+app.set('server.timeout', timeout);
 app.use(compression());
 app.use(helmet());
-app.use(timeout('300s'));
 app.use(bodyParser.json({limit: '10000mb'}));
 app.use(bodyParser.urlencoded({limit: '10000mb', extended: false}));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, {explorer: true}));
