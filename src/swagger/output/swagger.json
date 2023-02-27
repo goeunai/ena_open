@@ -82,7 +82,7 @@
                       },
                       "image": {
                         "type": "string",
-                        "example": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/HelloWorld.svg/2560px-HelloWorld.svg.png"
+                        "example": "https://ena-image-dev.s3.ap-northeast-2.amazonaws.com/1/1/20230101/1/image+(115).jpg"
                       }
                     }
                   }

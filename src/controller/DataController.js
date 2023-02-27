@@ -1,5 +1,5 @@
-import LogService from "../serivice/log.service.js";
-import DataService from "../service/DataService.js";
+import LogService from "../service/log.service.js";
+import DataService from "../service/data.service.js";
 
 export const handleImage = async (req, res) => {
     try {

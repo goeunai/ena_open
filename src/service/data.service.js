@@ -1,5 +1,5 @@
 import {createFilename, getFilePath} from "../common/utils.js";
-import AWSService from "../serivice/aws.service.js";
+import AWSService from "./aws.service.js";
 import DataRepository from "../repository/DataRepository.js";
 
 export default class DataService {
@@ -34,6 +34,9 @@ export default class DataService {
     async saveImagesToS3(images = []) {
         const apiList = images.map(image => this.uploadImage(image));
         await Promise.all(apiList);
+        // for (const image of images) {
+        //     await this.uploadImage(image);
+        // }
     }
 
     async saveBinaryImageToS3(binary, path) {

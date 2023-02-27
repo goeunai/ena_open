@@ -29,8 +29,8 @@ export default class DataRepository {
         }
     }
 
-    destroy(client) {
-        client.destroy();
+    async destroy(client) {
+        await client.destroy();
     }
 
     async updateEtag(rowId, etag) {
@@ -41,7 +41,7 @@ export default class DataRepository {
         } catch (e) {
             throw Error(`Etag 저장 실패: ${e.message}`)
         } finally {
-            this.destroy(client);
+            await this.destroy(client);
         }
     }
 
@@ -53,7 +53,7 @@ export default class DataRepository {
         } catch (e) {
             throw Error(`시퀀스 저장 실패: ${e.message}`);
         } finally {
-            this.destroy(client);
+            await this.destroy(client);
         }
     }
 
@@ -65,7 +65,7 @@ export default class DataRepository {
         } catch (e) {
             throw Error(`이미지 저장 실패: ${e.message}`)
         } finally {
-            this.destroy(client);
+            await this.destroy(client);
         }
     }
 
