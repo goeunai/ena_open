@@ -7,7 +7,7 @@ const whiteIp = (req, res, next) => {
     if (env === 'production') {
         const results = ALLOWED_IP.map(aip => ip.includes(aip));
         if (results.includes(true)) {
-            next();
+            return next();
         } else {
             return res.status(403).json({ error: "허용되지 않은 IP입니다." });
         }
