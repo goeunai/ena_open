@@ -12,7 +12,7 @@ import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 import compression from 'compression';
 import dayjs from "dayjs";
-import * as fs from "fs";
+import whiteIp from "./middleware/whiteIp.js";
 
 /**
  * App
@@ -41,7 +41,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, {explorer: true})
 /**
  * API
  */
-app.get("/", (req, res) => {
+app.get("/", whiteIp, (req, res) => {
     // #swagger.tags = ['Home']
     console.log(process.env.NODE_ENV);
     res.send(`Ok : ${now}`);
