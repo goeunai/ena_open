@@ -3,8 +3,7 @@ import {ALLOWED_IP} from "../common/constants.js";
 const whiteIp = (req, res, next) => {
     const ip = req.ip;
     console.log('IP : ', ip);
-    const env = process.env.NODE_ENV;
-    if (env === 'production') {
+    if (process.env.NODE_ENV) {
         const results = ALLOWED_IP.map(aip => ip.includes(aip));
         if (results.includes(true)) {
             return next();
