@@ -32,6 +32,7 @@ Sentry.init({
     tracesSampleRate: 1.0,
 });
 
+app.use(whiteIp);
 app.use(compression());
 app.use(helmet());
 app.use(bodyParser.json({limit: '10000mb'}));
@@ -41,7 +42,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, {explorer: true})
 /**
  * API
  */
-app.get("/", whiteIp, (req, res) => {
+app.get("/", (req, res) => {
     // #swagger.tags = ['Home']
     console.log(process.env.NODE_ENV);
     res.send(`Ok : ${now}`);

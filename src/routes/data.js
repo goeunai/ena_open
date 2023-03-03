@@ -2,11 +2,10 @@ import {Router} from 'express';
 import {handleImage} from "../controller/DataController.js";
 import {imageBodyValidator} from "../middleware/validation.js";
 import {validationResult} from 'express-validator';
-import whiteIp from "../middleware/whiteIp.js";
 
 const router = Router();
 
-router.post("/image", imageBodyValidator, whiteIp, (req, res, next) => {
+router.post("/image", imageBodyValidator, (req, res, next) => {
     /**
      #swagger.tags = ['Data']
      #swagger.parameters['data'] = {
