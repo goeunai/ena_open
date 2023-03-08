@@ -45,4 +45,17 @@ export default class DataService {
     async saveBinaryImageToS3(binary, path) {
         return await this.awsService.upload(binary, path);
     }
+    
+    async completeAnalyze({farmId, houseId, sequence}) {
+        // 데이터 찾기
+        const dataRepository = new DataRepository();
+        const foundList = await dataRepository.findSequence({farmId, houseId, sequence});
+        if (foundList.length === 0) return null;
+        
+        // 데이터 업데이트
+        const found = foundList[0];
+        await dataRepository.sequenceAnalyzed(found.id);
+        await dataRepository.destroy();
+        return true;
+    }
 }

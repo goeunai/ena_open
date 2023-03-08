@@ -1,5 +1,5 @@
 import knex from "knex"
-import {CaptureImageSchema, SequenceSchema} from "../schema/index.js";
+import {CaptureImageSchema, FindSequenceSchema, SequenceSchema} from "../schema/index.js";
 
 const SEQUENCE = "sequence";
 const CAPTURE_IMAGE = 'capture_image';
@@ -64,6 +64,10 @@ export default class DataRepository {
             const results = await client(SEQUENCE).insert(SequenceSchema(data));
             return results[0];
         } catch (e) {
+            const message = e?.message || "";
+            if (message.includes("Duplicate entry") && message.includes("sequence.mixed_id")) {
+                throw Error("동일한 데이터를 중복으로 생성할 수 없습니다.");
+            }
             throw Error(`시퀀스 저장 실패: ${e.message}`);
         }
     }
@@ -84,6 +88,26 @@ export default class DataRepository {
             return {...image, rowId};
         });
         return await Promise.all(apiList);
+    }
+
+    async findSequence(data) {
+        const client = await this.getConnect();
+        try {
+            return await client(SEQUENCE).select("*").where(FindSequenceSchema(data));
+        } catch (e) {
+            console.log(e);
+            throw Error(`Sequence조회 실패: ${e.message}`)
+        }
+    }
+
+    async sequenceAnalyzed(id) {
+        const client = await this.getConnect();
+        try {
+            await client(SEQUENCE).where({id}).update({analyzed: true});
+        } catch (e) {
+            console.log(e);
+            throw Error(`Sequence업데이트 실패(analyzed): ${e.message}`)
+        }
     }
 
 }

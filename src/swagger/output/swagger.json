@@ -160,7 +160,7 @@
               "properties": {
                 "error": {
                   "type": "string",
-                  "example": "Https Only"
+                  "example": "허용되지 않은 IP입니다."
                 }
               },
               "xml": {
@@ -168,6 +168,144 @@
               }
             },
             "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "메세지 || 서버 에러"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/data/sequence/analyzed": {
+      "post": {
+        "tags": [
+          "Data"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "알고리즘 분석이 완료된 Sequence 정보를 전송합니다.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "farmId": {
+                  "type": "string",
+                  "example": "goeun_farm"
+                },
+                "houseId": {
+                  "type": "string",
+                  "example": "goeun_1"
+                },
+                "sequence": {
+                  "type": "number",
+                  "example": 1
+                }
+              },
+              "required": [
+                "farmId",
+                "houseId",
+                "sequence"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number",
+                  "example": 1
+                },
+                "success": {
+                  "type": "number",
+                  "example": 1
+                },
+                "fail": {
+                  "type": "number",
+                  "example": 0
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "msg": {
+                        "type": "string",
+                        "example": "farmId는 필수값입니다."
+                      },
+                      "param": {
+                        "type": "string",
+                        "example": "farmId"
+                      },
+                      "location": {
+                        "type": "string",
+                        "example": "body"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "허용되지 않은 IP입니다."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "데이터를 찾을 수 없습니다."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "500": {
             "description": "Internal Server Error",
