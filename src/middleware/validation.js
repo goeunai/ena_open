@@ -20,4 +20,5 @@ export const sequenceAnalyzedBodyValidator = [
     body("farmId").notEmpty().trim().withMessage(requiredFarm),
     body("houseId").notEmpty().trim().withMessage(requiredHouse),
     body("sequence").isInt().withMessage(sequenceMsg),
+    body("sequenceDate").notEmpty().trim().withMessage(requiredSequenceDate),
 ]

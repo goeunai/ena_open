@@ -67,6 +67,7 @@ router.post("/sequence/analyzed", sequenceAnalyzedBodyValidator, (req, res, next
                 schema: {
                     $farmId: "goeun_farm",
                     $houseId: "goeun_1",
+                    $sequenceDate: "20230101",
                     $sequence: 1
                 }
      }

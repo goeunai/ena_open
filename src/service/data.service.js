@@ -46,10 +46,10 @@ export default class DataService {
         return await this.awsService.upload(binary, path);
     }
     
-    async completeAnalyze({farmId, houseId, sequence}) {
+    async completeAnalyze(data) {
         // 데이터 찾기
         const dataRepository = new DataRepository();
-        const foundList = await dataRepository.findSequence({farmId, houseId, sequence});
+        const foundList = await dataRepository.findSequence(data);
         if (foundList.length === 0) return null;
         
         // 데이터 업데이트

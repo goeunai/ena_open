@@ -1,3 +1,5 @@
+import {sequenceMixedId} from "../common/utils.js";
+
 export const SequenceSchema = (
     {
         farmId,
@@ -13,7 +15,7 @@ export const SequenceSchema = (
         sequence_date: sequenceDate,
         sequence_number: Number(sequence),
         total_rounds: Number(totalRounds),
-        mixed_id: `${farmId}:${houseId}:${sequenceDate}:${sequence}`
+        mixed_id: sequenceMixedId({farmId, houseId,sequenceDate, sequence})
     }
 }
 
@@ -29,10 +31,8 @@ export const CaptureImageSchema = (sequenceId, image) => {
     }
 }
 
-export const FindSequenceSchema = ({farmId, houseId, sequence}) => {
+export const FindSequenceSchema = ({farmId, houseId, sequenceDate, sequence}) => {
     return {
-        raw_farm_id: farmId,
-        raw_house_id: houseId,
-        sequence_number: Number(sequence),
+        mixed_id: sequenceMixedId({farmId, houseId,sequenceDate, sequence}),
     }
 }

@@ -209,6 +209,10 @@
                   "type": "string",
                   "example": "goeun_1"
                 },
+                "sequenceDate": {
+                  "type": "string",
+                  "example": "20230101"
+                },
                 "sequence": {
                   "type": "number",
                   "example": 1
@@ -217,6 +221,7 @@
               "required": [
                 "farmId",
                 "houseId",
+                "sequenceDate",
                 "sequence"
               ]
             }

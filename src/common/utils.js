@@ -17,3 +17,7 @@ export const createFilename = (image) => {
     const now = new Date().valueOf();
     return `${now}_${image.round}_${image.category || 'N'}.png`
 }
+
+export const sequenceMixedId = ({farmId, houseId, sequenceDate, sequence}) => {
+    return `${farmId}:${houseId}:${sequenceDate}:${sequence}`;
+}
