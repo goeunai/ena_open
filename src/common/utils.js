@@ -21,3 +21,16 @@ export const createFilename = (image) => {
 export const sequenceMixedId = ({farmId, houseId, sequenceDate, sequence}) => {
     return `${farmId}:${houseId}:${sequenceDate}:${sequence}`;
 }
+
+export const dbOption = (host, user, password, database) => {
+    return {
+        client: "mysql2",
+        connection: {
+            port: 3306,
+            host,
+            user,
+            password,
+            database,
+        },
+    };
+}

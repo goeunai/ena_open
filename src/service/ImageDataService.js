@@ -1,13 +1,13 @@
 import {createFilename, getFilePath} from "../common/utils.js";
 import AWSService from "./aws.service.js";
-import DataRepository from "../repository/DataRepository.js";
+import ImageDataRepository from "../repository/ImageDataRepository.js";
 
-export default class DataService {
+export default class ImageDataService {
     awsService = new AWSService();
 
     async createDataSet({images, ...data}) {
-        const dataRepository = new DataRepository();
-        const sequenceId = await dataRepository.createSequence(data);
+        const imageDataRepository = new ImageDataRepository();
+        const sequenceId = await imageDataRepository.createSequence(data);
         const basePath = `${data.farmId}/${data.houseId}/${data.sequenceDate}/${data.sequence}`;
 
         const reformed = images.map(image => ({
@@ -16,8 +16,8 @@ export default class DataService {
             filename: createFilename(image),
             path: basePath,
         }));
-        const imagesWithRowId = await dataRepository.createCaptureImages(sequenceId, reformed);
-        await dataRepository.destroy();
+        const imagesWithRowId = await imageDataRepository.createCaptureImages(sequenceId, reformed);
+        await imageDataRepository.destroy();
         /**
          * 비동기적으로 S3에 저장
          */
@@ -33,10 +33,10 @@ export default class DataService {
     }
 
     async saveImagesToS3(images = []) {
-        const dataRepository = new DataRepository();
-        const apiList = images.map(image => this.uploadImage(image, dataRepository));
+        const imageDataRepository = new ImageDataRepository();
+        const apiList = images.map(image => this.uploadImage(image, imageDataRepository));
         await Promise.all(apiList);
-        await dataRepository.destroy();
+        await imageDataRepository.destroy();
         // for (const image of images) {
         //     await this.uploadImage(image);
         // }
@@ -48,14 +48,14 @@ export default class DataService {
     
     async completeAnalyze(data) {
         // 데이터 찾기
-        const dataRepository = new DataRepository();
-        const foundList = await dataRepository.findSequence(data);
+        const imageDataRepository = new ImageDataRepository();
+        const foundList = await imageDataRepository.findSequence(data);
         if (foundList.length === 0) return null;
         
         // 데이터 업데이트
         const found = foundList[0];
-        await dataRepository.sequenceAnalyzed(found.id);
-        await dataRepository.destroy();
+        await imageDataRepository.sequenceAnalyzed(found.id);
+        await imageDataRepository.destroy();
         return true;
     }
 }

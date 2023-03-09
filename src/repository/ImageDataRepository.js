@@ -1,57 +1,23 @@
-import knex from "knex"
 import {CaptureImageSchema, FindSequenceSchema, SequenceSchema} from "../schema/index.js";
+import {connectDB, destroyDB} from "../common/knexUtils.js";
 
 const SEQUENCE = "sequence";
 const CAPTURE_IMAGE = 'capture_image';
 
-export default class DataRepository {
-    DB_OPTION = {
-        client: "mysql2",
-        connection: {
-            port: 3306,
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PW,
-            database: process.env.DB_NAME,
-        },
-    };
-    /** @type {knex} */ client
-
-    /**
-     * @returns {Promise<knex>}
-     */
-    async connect() {
-        return knex(this.DB_OPTION);
-    }
-
-    async checkConnection(client) {
-        try {
-            await client.raw("SELECT * FROM sequence LIMIT 1;");
-        } catch (e) {
-            throw Error(`DB 연결 실패: ${error.message}`)
-        }
-    }
+export default class ImageDataRepository {
+    /** @type {knex} */ client;
 
     async getConnect() {
-        if (!this.client) {
-            this.client =  await this.connect();
-        }
-        return this.client;
+        return this.client ? this.client : this.client = await connectDB(this.client);
     }
 
-    async destroy() {
-        try {
-            await this.client.destroy();
-        } catch (e) {
-            console.log('DB 종료 실패', e);
-        }
+    destroy() {
+        return destroyDB(this.client);
     }
-
 
     async updateEtag(rowId, etag) {
         const client = await this.getConnect();
         try {
-            await this.connect();
             const update = await client(CAPTURE_IMAGE).update({etag}).where('id', rowId);
         } catch (e) {
             throw Error(`Etag 저장 실패: ${e.message}`)

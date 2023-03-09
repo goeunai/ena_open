@@ -8,8 +8,7 @@
   "host": "localhost:7000",
   "basePath": "/",
   "schemes": [
-    "http",
-    "https"
+    "http"
   ],
   "securityDefinitions": {},
   "consumes": [
@@ -311,6 +310,199 @@
                 "name": "main"
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "메세지 || 서버 에러"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/data/sensor": {
+      "post": {
+        "tags": [
+          "Sensor"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "측정된 센서 값입니다.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "deviceId": {
+                  "type": "number",
+                  "example": 1
+                },
+                "measuredDate": {
+                  "type": "string",
+                  "example": "2023-01-01T00:00:00"
+                },
+                "light": {
+                  "type": "number",
+                  "example": 1.1
+                },
+                "co2": {
+                  "type": "number",
+                  "example": 1.2
+                },
+                "temp": {
+                  "type": "number",
+                  "example": 1.3
+                },
+                "humidity": {
+                  "type": "number",
+                  "example": 1.4
+                },
+                "underEc": {
+                  "type": "number",
+                  "example": 1.5
+                },
+                "underPh": {
+                  "type": "number",
+                  "example": 1.6
+                },
+                "underTemp": {
+                  "type": "number",
+                  "example": 1.7
+                },
+                "underHumidity": {
+                  "type": "number",
+                  "example": 1.8
+                },
+                "fieldWind": {
+                  "type": "number",
+                  "example": 1.9
+                },
+                "fieldLight": {
+                  "type": "number",
+                  "example": 2
+                },
+                "fieldTemp": {
+                  "type": "number",
+                  "example": 2.1
+                },
+                "fieldHumidity": {
+                  "type": "number",
+                  "example": 2.2
+                },
+                "fieldRain": {
+                  "type": "number",
+                  "example": 2.3
+                },
+                "inPh": {
+                  "type": "number",
+                  "example": 2.4
+                },
+                "inEc": {
+                  "type": "number",
+                  "example": 2.5
+                },
+                "inTemp": {
+                  "type": "number",
+                  "example": 2.6
+                },
+                "outPh": {
+                  "type": "number",
+                  "example": 2.7
+                },
+                "outEc": {
+                  "type": "number",
+                  "example": 2.8
+                },
+                "outTemp": {
+                  "type": "number",
+                  "example": 2.9
+                }
+              },
+              "required": [
+                "deviceId",
+                "measuredDate",
+                "light",
+                "co2",
+                "temp",
+                "humidity",
+                "underEc",
+                "underPh",
+                "underTemp",
+                "underHumidity",
+                "fieldWind",
+                "fieldLight",
+                "fieldTemp",
+                "fieldHumidity",
+                "fieldRain",
+                "inPh",
+                "inEc",
+                "inTemp",
+                "outPh",
+                "outEc",
+                "outTemp"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "msg": {
+                        "type": "string",
+                        "example": "deviceId는 필수값입니다."
+                      },
+                      "param": {
+                        "type": "string",
+                        "example": "deviceId"
+                      },
+                      "location": {
+                        "type": "string",
+                        "example": "body"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "허용되지 않은 IP입니다."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Forbidden"
           },
           "500": {
             "description": "Internal Server Error",

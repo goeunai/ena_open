@@ -19,6 +19,11 @@ const getHost = () => {
     }
 }
 
+const getSchema = () => {
+    const env = process.env.NODE_ENV;
+    return env ? ["https"] : ["http"];
+}
+
 const host = getHost();
 console.log('host', host);
 
@@ -30,7 +35,7 @@ const doc = {
     },
     host,
     basePath: '/',
-    schemes: ["http", "https"],
+    schemes: getSchema(),
     consumes: ["application/json"],
     produces: ["application/json"],
     securityDefinitions: {}, // by default: empty object
