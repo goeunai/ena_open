@@ -12,7 +12,6 @@ import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 import compression from 'compression';
 import dayjs from "dayjs";
-import whiteIp from "./middleware/whiteIp.js";
 
 /**
  * App
@@ -32,7 +31,6 @@ Sentry.init({
     tracesSampleRate: 1.0,
 });
 
-// app.use(whiteIp);
 app.use(compression());
 app.use(helmet());
 app.use(bodyParser.json({limit: '10000mb'}));
