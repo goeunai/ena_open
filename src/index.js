@@ -23,6 +23,7 @@ const now = dayjs().format("YYYY-MM-DD HH:mm");
  * Configuration
  */
 Sentry.init({
+    environment: process.env.NODE_ENV,
     dsn: process.env.SENTRY_DSN,
     integrations: [
         new Sentry.Integrations.Http({ tracing: true }),
