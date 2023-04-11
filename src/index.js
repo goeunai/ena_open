@@ -12,6 +12,7 @@ import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 import compression from 'compression';
 import dayjs from "dayjs";
+import morgan from 'morgan';
 
 /**
  * App
@@ -34,6 +35,7 @@ Sentry.init({
 
 app.use(compression());
 app.use(helmet());
+app.use(morgan('combined'))
 app.use(bodyParser.json({limit: '10000mb'}));
 app.use(bodyParser.urlencoded({limit: '10000mb', extended: false}));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, {explorer: true}));
