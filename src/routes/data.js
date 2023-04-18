@@ -2,8 +2,11 @@ import {Router} from 'express';
 import {handleAnalyzeData, handleImage, handleSensorData} from "../controller/DataController.js";
 import {imageBodyValidator, sensorBodyValidator, sequenceAnalyzedBodyValidator} from "../middleware/validation.js";
 import {validationResult} from 'express-validator';
+import morgan from 'morgan';
+
 
 const router = Router();
+router.use(morgan('combined'));
 
 router.post("/image", imageBodyValidator, (req, res, next) => {
     /**
